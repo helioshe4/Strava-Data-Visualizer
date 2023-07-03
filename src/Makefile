@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 LIBS = -lcurl 
 
-SRCS = main2.cpp
+SRCS = main.cpp
 OBJS = $(SRCS:.cpp=.o)
 EXECUTABLE = program
 
