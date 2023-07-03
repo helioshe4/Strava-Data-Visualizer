@@ -105,9 +105,6 @@ int main() {
 	//std::cout << my_dataset << '\n';
 
 
-	//std::string name = my_dataset[0]["name"].get<std::string>();
-
-	//std::cout << name << '\n';
 
 	std::cout << my_dataset[0]["name"] << "\n";
 	std::cout << my_dataset[0]["map"]["summary_polyline"] << "\n";
