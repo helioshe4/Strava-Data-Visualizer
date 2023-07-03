@@ -2,8 +2,37 @@
 #include <string>
 #include <cstdlib>
 #include <fstream>
+#include <vector>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+
+struct WorkoutDataPoint {
+	std::string name;
+	double distance;
+	int moving_time;
+	int elapsed_time;
+	double total_elevation_gain;
+	std::string type;
+	std::string sport_type;
+	std::string workout_type;
+	int id;
+	std::string start_date;
+	std::string start_date_local;
+	std::string timezone;
+	std::string location_city;
+	std::string location_state;
+	std::string location_country;
+
+	//todo decide which other data points to add
+	double average_speed;
+	double max_speed;
+	bool has_heartrate;
+	double average_heartrate;
+	double max_heartrate;
+	double elev_high;
+	double elev_low;
+};
+
 
 void loadEnvFromFile(const std::string& filename) {
 	std::ifstream file(filename);
@@ -84,10 +113,6 @@ int main() {
 		return 1;
 	}
 	
-	//std::string client_id = std::getenv("CLIENT_ID");
-	//std::string client_secret = std::getenv("STRAVA_CLIENT_SECRET");
-	//std::string refresh_token = std::getenv("STRAVA_REFRESH_TOKEN");
-
 	std::string auth_url = "https://www.strava.com/oauth/token";
 	std::string activities_url = "https://www.strava.com/api/v3/athlete/activities";
 	std::string postFields = "client_id=" + std::string(client_id) + "&client_secret=" + std::string(client_secret) + "&refresh_token=" + std::string(refresh_token) + "&grant_type=refresh_token&f=json";
@@ -102,12 +127,10 @@ int main() {
 	postFields = "per_page=200&page=1";
 	nlohmann::json my_dataset = getJsonFromUrl(activities_url, header);
 
-	//std::cout << my_dataset << '\n';
-
-
 
 	std::cout << my_dataset[0]["name"] << "\n";
 	std::cout << my_dataset[0]["map"]["summary_polyline"] << "\n";
+
 
 	return 0;
 }
