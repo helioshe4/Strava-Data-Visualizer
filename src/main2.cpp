@@ -14,7 +14,6 @@ void loadEnvFromFile(const std::string& filename) {
             if (equalsPos != std::string::npos) {
                 std::string key = line.substr(0, equalsPos);
                 std::string value = line.substr(equalsPos + 1);
-                //std::cout << "Setting environment variable: " << key << "=" << value << std::endl;
                 setenv(key.c_str(), value.c_str(), 1);
             }
         }
@@ -38,7 +37,7 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* s) 
     return size*nmemb;
 }
 
-nlohmann::json getJsonFromUrl(const std::string& url, const std::string& postFields, const std::string& header) {
+nlohmann::json getJsonFromUrl(const std::string& url, const std::string& header, const std::string& postFields = "") {
     CURL* curl;
     CURLcode res;
     std::string readBuffer;
@@ -49,7 +48,10 @@ nlohmann::json getJsonFromUrl(const std::string& url, const std::string& postFie
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
+				if (!postFields.empty()) {
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
+        }
+        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); //only for https
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L); //only for https
         struct curl_slist *headers = NULL;
@@ -74,8 +76,13 @@ int main() {
 		loadEnvFromFile(".env");
 
 		const char* client_id = std::getenv("CLIENT_ID");
-    const char* client_secret = std::getenv("CLIENT_SECRET");
-    const char* refresh_token = std::getenv("REFRESH_TOKEN");
+    const char* client_secret = std::getenv("STRAVA_CLIENT_SECRET");
+    const char* refresh_token = std::getenv("STRAVA_REFRESH_TOKEN");
+
+		if (!client_id || !client_secret || !refresh_token) {
+        std::cerr << "Error: Missing environment variables." << std::endl;
+        return 1;
+    }
 		
 		//std::string client_id = std::getenv("CLIENT_ID");
 		//std::string client_secret = std::getenv("STRAVA_CLIENT_SECRET");
@@ -87,18 +94,16 @@ int main() {
     std::string header = "";
 
     std::cout << "Requesting Token...\n";
-    nlohmann::json res = getJsonFromUrl(auth_url, postFields, header);
+    nlohmann::json res = getJsonFromUrl(auth_url, header, postFields);
     std::string access_token = res["access_token"];
     std::cout << "Access Token = " << access_token << "\n";
 
     header = "Authorization: Bearer " + access_token;
     postFields = "per_page=200&page=1";
-    nlohmann::json my_dataset = getJsonFromUrl(activities_url, postFields, header);
+    nlohmann::json my_dataset = getJsonFromUrl(activities_url, header);
 
 		std::cout << my_dataset << '\n';
 
-		std::cout << "here" << '\n';
-		std::cout << header  << '\n';
 
 		//std::string name = my_dataset[0]["name"].get<std::string>();
 
