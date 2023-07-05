@@ -43,5 +43,6 @@ std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArra
 void loadEnvFromFile(const std::string &filename);
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s);
 nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header, const std::string &postFields = "");
+std::vector<WorkoutDataPoint> getWorkoutData();
 
 #endif

@@ -10,13 +10,21 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    stravachart.cpp
+    stravachart.cpp \
+    $$PWD/../src/api.cpp
 
 HEADERS += \
-    stravachart.h
+    stravachart.h \
+    $$PWD/../include/api.h \
+    $$PWD/../include/workoutdatapoint.h
 
 FORMS += \
     stravachart.ui
+
+LIBS += -lcurl
+
+INCLUDEPATH += $$PWD/../include/json.h
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
