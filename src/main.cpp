@@ -6,8 +6,7 @@
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
-struct WorkoutDataPoint
-{
+struct WorkoutDataPoint {
   std::string name;
   double distance;
   int moving_time;
@@ -27,19 +26,17 @@ struct WorkoutDataPoint
   // todo decide which other data points to add
   double average_speed;
   double max_speed;
-  bool has_heartrate;
+  //bool has_heartrate;
   double average_heartrate;
   double max_heartrate;
   double elev_high;
   double elev_low;
 };
 
-std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArray)
-{
+std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArray) {
   std::vector<WorkoutDataPoint> workoutDataPoints;
 
-  for (const auto &jsonObject : jsonArray)
-  {
+  for (const auto &jsonObject : jsonArray) {
     WorkoutDataPoint workoutDataPoint;
 
     // need to check .isnull for string fields
@@ -77,40 +74,30 @@ std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArra
   return workoutDataPoints;
 }
 
-void loadEnvFromFile(const std::string &filename)
-{
+void loadEnvFromFile(const std::string &filename) {
   std::ifstream file(filename);
-  if (file.is_open())
-  {
+  if (file.is_open()) {
     std::string line;
-    while (std::getline(file, line))
-    {
+    while (std::getline(file, line)) {
       size_t equalsPos = line.find('=');
-      if (equalsPos != std::string::npos)
-      {
+      if (equalsPos != std::string::npos) {
         std::string key = line.substr(0, equalsPos);
         std::string value = line.substr(equalsPos + 1);
         setenv(key.c_str(), value.c_str(), 1);
       }
     }
     file.close();
-  }
-  else
-  {
+  } else {
     std::cerr << "Failed to open environment file: " << filename << std::endl;
   }
 }
 
-size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s)
-{
+size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s) {
   size_t newLength = size * nmemb;
   size_t oldLength = s->size();
-  try
-  {
+  try {
     s->resize(oldLength + newLength);
-  }
-  catch (std::bad_alloc &e)
-  {
+  } catch (std::bad_alloc &e) {
     return 0;
   }
 
@@ -118,21 +105,18 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s)
   return size * nmemb;
 }
 
-nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header, const std::string &postFields = "")
-{
+nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header, const std::string &postFields = "") {
   CURL *curl;
   CURLcode res;
   std::string readBuffer;
 
   curl_global_init(CURL_GLOBAL_DEFAULT);
   curl = curl_easy_init();
-  if (curl)
-  {
+  if (curl) {
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-    if (!postFields.empty())
-    {
+    if (!postFields.empty()) {
       curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
     }
     // curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
@@ -144,8 +128,7 @@ nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header,
 
     res = curl_easy_perform(curl);
 
-    if (res != CURLE_OK)
-    {
+    if (res != CURLE_OK) {
       fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
     }
 
@@ -157,16 +140,14 @@ nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header,
   return nlohmann::json::parse(readBuffer);
 }
 
-int main()
-{
+int main() {
   loadEnvFromFile(".env");
 
   const char *client_id = std::getenv("CLIENT_ID");
   const char *client_secret = std::getenv("STRAVA_CLIENT_SECRET");
   const char *refresh_token = std::getenv("STRAVA_REFRESH_TOKEN");
 
-  if (!client_id || !client_secret || !refresh_token)
-  {
+  if (!client_id || !client_secret || !refresh_token) {
     std::cerr << "Error: Missing environment variables." << std::endl;
     return 1;
   }
@@ -183,12 +164,10 @@ int main()
 
   header = "Authorization: Bearer " + access_token;
   postFields = "per_page=200&page=1";
-  nlohmann::json my_dataset = getJsonFromUrl(activities_url, header);
+  nlohmann::json dataset = getJsonFromUrl(activities_url, header);
 
-  std::vector<WorkoutDataPoint> workout1 = convertJsonToVector(my_dataset);
+  std::vector<WorkoutDataPoint> workoutsVector = convertJsonToVector(dataset);
 
-  // std::cout << my_dataset[0]["name"] << "\n";
-  // std::cout << my_dataset[0]["map"]["summary_polyline"] << "\n";
 
   return 0;
 }
