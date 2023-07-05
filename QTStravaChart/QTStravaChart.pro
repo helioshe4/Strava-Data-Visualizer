@@ -16,14 +16,15 @@ SOURCES += \
 HEADERS += \
     stravachart.h \
     $$PWD/../include/api.h \
-    $$PWD/../include/workoutdatapoint.h
+    $$PWD/../include/workoutdatapoint.h \
+    $$PWD/../include/json.h
 
 FORMS += \
     stravachart.ui
 
 LIBS += -lcurl
 
-INCLUDEPATH += $$PWD/../include/json.h
+#INCLUDEPATH += $$PWD/../include/json.h
 
 
 # Default rules for deployment.
