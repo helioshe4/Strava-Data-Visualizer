@@ -1,37 +1,8 @@
 #include <iostream>
-#include <string>
-#include <cstdlib>
-#include <fstream>
 #include <vector>
-#include <curl/curl.h>
-#include <nlohmann/json.hpp>
-
-struct WorkoutDataPoint {
-  std::string name;
-  double distance;
-  int moving_time;
-  int elapsed_time;
-  double total_elevation_gain;
-  std::string type;
-  std::string sport_type;
-  std::string workout_type;
-  int id;
-  std::string start_date;
-  std::string start_date_local;
-  std::string timezone;
-  std::string location_city;
-  std::string location_state;
-  std::string location_country;
-
-  // todo decide which other data points to add
-  double average_speed;
-  double max_speed;
-  //bool has_heartrate;
-  double average_heartrate;
-  double max_heartrate;
-  double elev_high;
-  double elev_low;
-};
+#include "../include/api.h"
+//#include "../include/chartrenderer.h"
+#include "../include/workoutdatapoint.h"
 
 std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArray) {
   std::vector<WorkoutDataPoint> workoutDataPoints;
@@ -105,7 +76,8 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s) 
   return size * nmemb;
 }
 
-nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header, const std::string &postFields = "") {
+nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header, const std::string &postFields)
+{
   CURL *curl;
   CURLcode res;
   std::string readBuffer;
@@ -140,8 +112,8 @@ nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header,
   return nlohmann::json::parse(readBuffer);
 }
 
-int main() {
-  loadEnvFromFile(".env");
+std::vector<WorkoutDataPoint> getWorkoutData() {
+  loadEnvFromFile("../src/.env");
 
   const char *client_id = std::getenv("CLIENT_ID");
   const char *client_secret = std::getenv("STRAVA_CLIENT_SECRET");
@@ -149,7 +121,7 @@ int main() {
 
   if (!client_id || !client_secret || !refresh_token) {
     std::cerr << "Error: Missing environment variables." << std::endl;
-    return 1;
+    return std::vector<WorkoutDataPoint>();
   }
 
   std::string auth_url = "https://www.strava.com/oauth/token";
@@ -166,8 +138,9 @@ int main() {
   postFields = "per_page=200&page=1";
   nlohmann::json dataset = getJsonFromUrl(activities_url, header);
 
-  std::vector<WorkoutDataPoint> workoutsVector = convertJsonToVector(dataset);
-
-
-  return 0;
+  std::vector<WorkoutDataPoint> workoutData = convertJsonToVector(dataset);
+  //ChartRenderer chartRenderer;
+  //chartRenderer.renderChart(workoutData);
+	
+  return workoutData;
 }

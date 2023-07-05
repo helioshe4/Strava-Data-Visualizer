@@ -1,8 +1,8 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall
-LIBS = -lcurl 
+CXXFLAGS = -std=c++17 -Wall -I ../include
+LIBS = -lcurl
 
-SRCS = main.cpp
+SRCS = api.cpp 
 OBJS = $(SRCS:.cpp=.o)
 EXECUTABLE = program
 
@@ -11,7 +11,7 @@ all: $(EXECUTABLE)
 $(EXECUTABLE): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LIBS)
 
-.cpp.o:
+api.o: api.cpp ../include/api.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
