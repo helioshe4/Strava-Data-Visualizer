@@ -1,5 +1,5 @@
-#include <iostream>
-#include <vector>
+//#include <iostream>
+//#include <vector>
 #include "../include/api.h"
 //#include "../include/chartrenderer.h"
 #include "../include/workoutdatapoint.h"
@@ -24,7 +24,13 @@ std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArra
 
     workoutDataPoint.id = jsonObject.contains("id") ? jsonObject["id"].get<int>() : 0;
 
-    workoutDataPoint.start_date = jsonObject.contains("start_date") && !jsonObject["start_date"].is_null() ? jsonObject["start_date"] : "";
+    //workoutDataPoint.start_date = jsonObject.contains("start_date") && !jsonObject["start_date"].is_null() ? jsonObject["start_date"] : "";
+	std::string startDateStr = jsonObject.contains("start_date") && !jsonObject["start_date"].is_null() ? jsonObject["start_date"] : "";
+	struct tm startDate = {};
+	if (!startDateStr.empty()) {
+    	strptime(startDateStr.c_str(), "%Y-%m-%dT%H:%M:%SZ", &startDate);
+	}
+
     workoutDataPoint.start_date_local = jsonObject.contains("start_date_local") && !jsonObject["start_date_local"].is_null() ? jsonObject["start_date_local"] : "";
     workoutDataPoint.timezone = jsonObject.contains("timezone") && !jsonObject["timezone"].is_null() ? jsonObject["timezone"] : "";
 
