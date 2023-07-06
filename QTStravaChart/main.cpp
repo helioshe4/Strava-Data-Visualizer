@@ -18,6 +18,10 @@
 #include "../include/api.h"
 #include <ctime>
 #include <iostream>
+#include <QToolTip>
+#include <QVBoxLayout>
+#include <QtCharts/QLegend>
+#include <QtCharts/QLegendMarker>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -28,28 +32,32 @@ int main(int argc, char *argv[])
     std::vector<WorkoutDataPoint> data = getWorkoutData();
 
     QLineSeries *series = new QLineSeries();
-    //int count = 0;
+    QLineSeries *series2 = new QLineSeries();
+    QLineSeries *series3 = new QLineSeries();
     for (const WorkoutDataPoint& dataPoint : data) {
         // Convert the date to a QDateTime
-
-
         QString qstr = QString::fromStdString(dataPoint.start_date);
         QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
         qint64 xValue = datetime.toMSecsSinceEpoch();
         series->append(xValue, (dataPoint.distance) / 1000);
+        series2->append(xValue, (dataPoint.average_heartrate) / 1000);
         std::cout << xValue << std::endl;
-//        QString qstr = QString::fromStdString(dataPoint.start_date);
-//        QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
-//        qint64 xValue = datetime.toMSecsSinceEpoch();
-//        series->append(xValue, (dataPoint.distance) / 1000);
-//        std::cout << xValue << std::endl;
     }
 
     QChart *chart = new QChart();
+    //series
     chart->addSeries(series);
-    chart->legend()->hide();
+
+    chart->addSeries(series2);
+
+    //legend
+    chart->legend()->setVisible(true);
+    chart->legend()->setAlignment(Qt::AlignBottom);
+    //labels on series
+    series->setPointLabelsVisible(true);
+    series->setPointLabelsFormat("@yPoint");
+
     chart->setAnimationOptions(QChart::AllAnimations);
-    //chart->createDefaultAxes();
 
     chart->setTitle("Workout Distance Over Time");
 
@@ -67,18 +75,64 @@ int main(int argc, char *argv[])
     chart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
 
-    // Create and set the y-axis
-//    QValueAxis *axisY = new QValueAxis();
-//    axisY->setTitleText("Distance");
-//    chart->addAxis(axisY, Qt::AlignLeft);
-//    series->attachAxis(axisY);
+    QValueAxis *axisY2 = new QValueAxis;
+    axisY2->setLabelFormat("%i");
+    axisY2->setTitleText("Average HR (bpm)");
+    chart->addAxis(axisY2, Qt::AlignRight);
+    series2->attachAxis(axisY2);
+
+    QChartView *chartView1 = new QChartView(chart);
+    chartView1->setRenderHint(QPainter::Antialiasing);
 
 
-    QChartView *chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+     //chart 2
+//    QLineSeries *series2 = new QLineSeries();
+//    //int count = 0;
+//    for (const WorkoutDataPoint& dataPoint : data) {
+//        // Convert the date to a QDateTime
 
-    StravaChart window;
-    window.setCentralWidget(chartView);
+//        QString qstr = QString::fromStdString(dataPoint.start_date);
+//        QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
+//        qint64 xValue = datetime.toMSecsSinceEpoch();
+//        series2->append(xValue, (dataPoint.distance) / 1000);
+//        std::cout << xValue << std::endl;
+//    }
+
+    /*
+    QChart *chart2 = new QChart();
+    chart2->addSeries(series2);
+    chart2->legend()->hide();
+    chart2->setAnimationOptions(QChart::AllAnimations);
+    //chart->createDefaultAxes();
+
+    chart2->setTitle("Workout Distance Over Time");
+
+    // Create and set the x-axis
+    QDateTimeAxis  *axisX2 = new QDateTimeAxis;
+    axisX2->setTickCount(10);
+    axisX2->setFormat("MMM yyyy");
+    axisX2->setTitleText("Date");
+    chart2->addAxis(axisX2, Qt::AlignBottom);
+    series2->attachAxis(axisX2);
+
+    QValueAxis *axisY2 = new QValueAxis;
+    axisY2->setLabelFormat("%i");
+    axisY2->setTitleText("Distance (km)");
+    chart2->addAxis(axisY2, Qt::AlignLeft);
+    series2->attachAxis(axisY2);
+
+    QChartView *chartView2 = new QChartView(chart2);
+    chartView2->setRenderHint(QPainter::Antialiasing);
+    */
+    // Create a layout and add the chart views
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(chartView1);
+    //layout->addWidget(chartView2);
+
+
+    // Create a widget, set its layout, and show it
+    QWidget window;
+    window.setLayout(layout);
     window.resize(820, 600);
     window.show();
 
