@@ -15,8 +15,8 @@ struct WorkoutDataPoint {
     std::string sport_type;
     std::string workout_type;
     int id;
-    //std::string start_date;
-	struct tm start_date;
+    std::string start_date;
+//	struct tm start_date;
     std::string start_date_local;
     std::string timezone;
     std::string location_city;

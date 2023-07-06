@@ -31,22 +31,18 @@ int main(int argc, char *argv[])
     //int count = 0;
     for (const WorkoutDataPoint& dataPoint : data) {
         // Convert the date to a QDateTime
-//        QString qstr = QString::fromStdString(dataPoint.start_date);
-//        QDateTime dt = QDateTime::fromString(qstr, "yyyy-MM-ddTHH:mm:ssZ");
-//        //QDateTime datetime = QDateTime::fromString(QString::fromStdString(dataPoint.start_date), Qt::ISODate);
-//        qint64 xValue = datetime.toMSecsSinceEpoch();
-//        series->append(xValue, (dataPoint.distance) / 1000);
 
-        std::tm timeInfo = dataPoint.start_date; // Assuming dataPoint.start_date is of type std::tm
-        std::stringstream ss;
-        ss << std::put_time(&timeInfo, "%Y-%m-%dT%H:%M:%S"); // Format the date and time
-        std::string dateString = ss.str();
 
-        // Convert the string to a QDateTime
-        QDateTime datetime = QDateTime::fromString(QString::fromStdString(dateString), Qt::ISODate);
+        QString qstr = QString::fromStdString(dataPoint.start_date);
+        QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
         qint64 xValue = datetime.toMSecsSinceEpoch();
         series->append(xValue, (dataPoint.distance) / 1000);
         std::cout << xValue << std::endl;
+//        QString qstr = QString::fromStdString(dataPoint.start_date);
+//        QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
+//        qint64 xValue = datetime.toMSecsSinceEpoch();
+//        series->append(xValue, (dataPoint.distance) / 1000);
+//        std::cout << xValue << std::endl;
     }
 
     QChart *chart = new QChart();
@@ -81,12 +77,10 @@ int main(int argc, char *argv[])
     QChartView *chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    QMainWindow window;
+    StravaChart window;
     window.setCentralWidget(chartView);
     window.resize(820, 600);
     window.show();
 
-    StravaChart w;
-    w.show();
     return a.exec();
 }
