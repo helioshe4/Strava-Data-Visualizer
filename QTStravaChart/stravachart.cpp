@@ -8,6 +8,7 @@ StravaChart::StravaChart(QWidget *parent)
     ui->setupUi(this);
 }
 
+
 StravaChart::~StravaChart()
 {
     delete ui;

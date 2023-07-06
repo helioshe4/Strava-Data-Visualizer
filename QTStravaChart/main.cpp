@@ -1,4 +1,5 @@
 #include "stravachart.h"
+#include "chartwidget.h"
 
 #include <QApplication>
 #include <QDateTime>
@@ -40,15 +41,16 @@ int main(int argc, char *argv[])
         QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
         qint64 xValue = datetime.toMSecsSinceEpoch();
         series->append(xValue, (dataPoint.distance) / 1000);
-        series2->append(xValue, (dataPoint.average_heartrate) / 1000);
+        series2->append(xValue, dataPoint.average_heartrate);
+        series3->append(xValue, (dataPoint.moving_time) / 60);
         std::cout << xValue << std::endl;
     }
 
     QChart *chart = new QChart();
     //series
     chart->addSeries(series);
-
     chart->addSeries(series2);
+    chart->addSeries(series3);
 
     //legend
     chart->legend()->setVisible(true);
@@ -98,32 +100,7 @@ int main(int argc, char *argv[])
 //        std::cout << xValue << std::endl;
 //    }
 
-    /*
-    QChart *chart2 = new QChart();
-    chart2->addSeries(series2);
-    chart2->legend()->hide();
-    chart2->setAnimationOptions(QChart::AllAnimations);
-    //chart->createDefaultAxes();
 
-    chart2->setTitle("Workout Distance Over Time");
-
-    // Create and set the x-axis
-    QDateTimeAxis  *axisX2 = new QDateTimeAxis;
-    axisX2->setTickCount(10);
-    axisX2->setFormat("MMM yyyy");
-    axisX2->setTitleText("Date");
-    chart2->addAxis(axisX2, Qt::AlignBottom);
-    series2->attachAxis(axisX2);
-
-    QValueAxis *axisY2 = new QValueAxis;
-    axisY2->setLabelFormat("%i");
-    axisY2->setTitleText("Distance (km)");
-    chart2->addAxis(axisY2, Qt::AlignLeft);
-    series2->attachAxis(axisY2);
-
-    QChartView *chartView2 = new QChartView(chart2);
-    chartView2->setRenderHint(QPainter::Antialiasing);
-    */
     // Create a layout and add the chart views
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(chartView1);
@@ -135,6 +112,7 @@ int main(int argc, char *argv[])
     window.setLayout(layout);
     window.resize(820, 600);
     window.show();
+
 
     return a.exec();
 }

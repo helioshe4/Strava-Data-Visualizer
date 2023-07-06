@@ -18,4 +18,6 @@ public:
 private:
     Ui::StravaChart *ui;
 };
+
+
 #endif // STRAVACHART_H

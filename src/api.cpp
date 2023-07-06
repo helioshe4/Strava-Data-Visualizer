@@ -140,7 +140,7 @@ std::vector<WorkoutDataPoint> getWorkoutData() {
   std::cout << "Requesting Token...\n";
   nlohmann::json res = getJsonFromUrl(auth_url, header, postFields);
   std::string access_token = res["access_token"];
-  std::cout << "Access Token = " << access_token << "\n";
+  //std::cout << "Access Token = " << access_token << "\n";
 
   header = "Authorization: Bearer " + access_token;
   postFields = "per_page=200&page=1";

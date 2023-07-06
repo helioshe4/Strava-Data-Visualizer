@@ -9,11 +9,13 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    chartwidget.cpp \
     main.cpp \
     stravachart.cpp \
     $$PWD/../src/api.cpp
 
 HEADERS += \
+    chartwidget.h \
     stravachart.h \
     $$PWD/../include/api.h \
     $$PWD/../include/workoutdatapoint.h \
