@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     std::vector<WorkoutDataPoint> data = getWorkoutData();
 
-    QLineSeries *series = new QLineSeries();
+    QLineSeries *series1 = new QLineSeries();
     QLineSeries *series2 = new QLineSeries();
     QLineSeries *series3 = new QLineSeries();
     for (const WorkoutDataPoint& dataPoint : data) {
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
         QString qstr = QString::fromStdString(dataPoint.start_date);
         QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
         qint64 xValue = datetime.toMSecsSinceEpoch();
-        series->append(xValue, (dataPoint.distance) / 1000);
+        series1->append(xValue, (dataPoint.distance) / 1000);
         series2->append(xValue, dataPoint.average_heartrate);
         series3->append(xValue, (dataPoint.moving_time) / 60);
         std::cout << xValue << std::endl;
@@ -48,16 +48,18 @@ int main(int argc, char *argv[])
 
     QChart *chart = new QChart();
     //series
-    chart->addSeries(series);
+    series1->setName("Distance");
+    series2->setName("Average Heart rate");
+    series3->setName("Moving Time");
+
+    chart->addSeries(series1);
     chart->addSeries(series2);
     chart->addSeries(series3);
 
-    //legend
-    chart->legend()->setVisible(true);
-    chart->legend()->setAlignment(Qt::AlignBottom);
+
     //labels on series
-    series->setPointLabelsVisible(true);
-    series->setPointLabelsFormat("@yPoint");
+    series1->setPointLabelsVisible(true);
+    series1->setPointLabelsFormat("@yPoint");
 
     chart->setAnimationOptions(QChart::AllAnimations);
 
@@ -69,13 +71,13 @@ int main(int argc, char *argv[])
     axisX->setFormat("MMM yyyy");
     axisX->setTitleText("Date");
     chart->addAxis(axisX, Qt::AlignBottom);
-    series->attachAxis(axisX);
+    series1->attachAxis(axisX);
 
     QValueAxis *axisY = new QValueAxis;
     axisY->setLabelFormat("%i");
     axisY->setTitleText("Distance (km)");
     chart->addAxis(axisY, Qt::AlignLeft);
-    series->attachAxis(axisY);
+    series1->attachAxis(axisY);
 
     QValueAxis *axisY2 = new QValueAxis;
     axisY2->setLabelFormat("%i");
@@ -83,6 +85,11 @@ int main(int argc, char *argv[])
     chart->addAxis(axisY2, Qt::AlignRight);
     series2->attachAxis(axisY2);
 
+    //legend
+    chart->legend()->setVisible(true);
+    chart->legend()->setAlignment(Qt::AlignBottom);
+
+\
     QChartView *chartView1 = new QChartView(chart);
     chartView1->setRenderHint(QPainter::Antialiasing);
 
