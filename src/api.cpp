@@ -120,21 +120,28 @@ nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header,
   return nlohmann::json::parse(readBuffer);
 }
 
-std::vector<WorkoutDataPoint> getWorkoutData() {
+std::vector<WorkoutDataPoint> getWorkoutData(const std::string &client_id, const std::string &client_secret, const std::string &refresh_token) {
+  
   loadEnvFromFile("../src/.env");
 
+  /*
   const char *client_id = std::getenv("CLIENT_ID");
   const char *client_secret = std::getenv("STRAVA_CLIENT_SECRET");
   const char *refresh_token = std::getenv("STRAVA_REFRESH_TOKEN");
+  */
+  
 
+  std::string postFields = "client_id=" + client_id + "&client_secret=" + client_secret + "&refresh_token=" + refresh_token + "&grant_type=refresh_token&f=json";
+  /*
   if (!client_id || !client_secret || !refresh_token) {
     std::cerr << "Error: Missing environment variables." << std::endl;
     return std::vector<WorkoutDataPoint>();
   }
+  */
 
   std::string auth_url = "https://www.strava.com/oauth/token";
   std::string activities_url = "https://www.strava.com/api/v3/athlete/activities";
-  std::string postFields = "client_id=" + std::string(client_id) + "&client_secret=" + std::string(client_secret) + "&refresh_token=" + std::string(refresh_token) + "&grant_type=refresh_token&f=json";
+  //std::string postFields = "client_id=" + std::string(client_id) + "&client_secret=" + std::string(client_secret) + "&refresh_token=" + std::string(refresh_token) + "&grant_type=refresh_token&f=json";
   std::string header = "";
 
   std::cout << "Requesting Token...\n";

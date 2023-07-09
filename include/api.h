@@ -25,6 +25,6 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s);
 nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header, const std::string &postFields = "");
 
 // wrapper that returns all the workouts from user
-std::vector<WorkoutDataPoint> getWorkoutData();
+std::vector<WorkoutDataPoint> getWorkoutData(const std::string &client_id, const std::string &client_secret, const std::string &refresh_token);
 
 #endif

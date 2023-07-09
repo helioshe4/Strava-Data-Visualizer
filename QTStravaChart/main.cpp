@@ -1,5 +1,6 @@
 #include "stravachart.h"
 #include "customchartview.h"
+#include "credentialsdialog.h"
 
 #include <QApplication>
 #include <QDateTime>
@@ -55,8 +56,39 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    QString client_id;
+    QString client_secret;
+    QString refresh_token;
+    CredentialsDialog dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        client_id = dialog.getClientId();
+        client_secret = dialog.getClientSecret();
+        refresh_token = dialog.getRefreshToken();
+
+
+
+        // If the user didn't enter any values, use the defaults
+        if (client_id.isEmpty() && client_secret.isEmpty() && refresh_token.isEmpty()) {
+            loadEnvFromFile("../src/.env");
+            client_id = QString::fromStdString(std::getenv("CLIENT_ID"));
+            client_secret = QString::fromStdString(std::getenv("STRAVA_CLIENT_SECRET"));
+            refresh_token = QString::fromStdString(std::getenv("STRAVA_REFRESH_TOKEN"));
+        }
+        /*
+        if (client_secret.isEmpty()) {
+            client_secret = QString::fromStdString(std::getenv("STRAVA_CLIENT_SECRET"));
+        }
+        if (refresh_token.isEmpty()) {
+            refresh_token = QString::fromStdString(std::getenv("STRAVA_REFRESH_TOKEN"));
+        }
+        */
+
+    }
     //api call to get workoutdata
-    std::vector<WorkoutDataPoint> data = getWorkoutData();
+    std::vector<WorkoutDataPoint> data = getWorkoutData(client_id.toStdString(), client_secret.toStdString(), refresh_token.toStdString());
+
+
+
 
     /*
     QLineSeries *series1 = new QLineSeries();
