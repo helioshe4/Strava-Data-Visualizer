@@ -9,14 +9,14 @@ CredentialsDialog::CredentialsDialog(QWidget *parent)
       clientIdEdit(new QLineEdit(this)),
       clientSecretEdit(new QLineEdit(this)),
       refreshTokenEdit(new QLineEdit(this)),
-      infoLabel(new QLabel("Enter your Strava API credentials. If you want to use the default credentials, leave the fields blank and press OK.", this))
+      infoLabel(new QLabel("Enter your Strava API credentials.", this))
 
 {
     QFormLayout *layout = new QFormLayout(this);
+    layout->addRow(infoLabel);
     layout->addRow("Client ID:", clientIdEdit);
     layout->addRow("Client Secret:", clientSecretEdit);
     layout->addRow("Refresh Token:", refreshTokenEdit);
-    layout->addRow(infoLabel);
 
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     connect(buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);

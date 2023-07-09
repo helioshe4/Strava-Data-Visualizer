@@ -74,15 +74,6 @@ int main(int argc, char *argv[])
             client_secret = QString::fromStdString(std::getenv("STRAVA_CLIENT_SECRET"));
             refresh_token = QString::fromStdString(std::getenv("STRAVA_REFRESH_TOKEN"));
         }
-        /*
-        if (client_secret.isEmpty()) {
-            client_secret = QString::fromStdString(std::getenv("STRAVA_CLIENT_SECRET"));
-        }
-        if (refresh_token.isEmpty()) {
-            refresh_token = QString::fromStdString(std::getenv("STRAVA_REFRESH_TOKEN"));
-        }
-        */
-
     }
     //api call to get workoutdata
     std::vector<WorkoutDataPoint> data = getWorkoutData(client_id.toStdString(), client_secret.toStdString(), refresh_token.toStdString());
@@ -218,7 +209,7 @@ int main(int argc, char *argv[])
     //chart 2
     QChart *chart2 = new QChart();
     //general setup
-    chart2->setTitle("Correlation between average HR and distance");
+    chart2->setTitle("Relationship between average HR and distance");
     chart2->createDefaultAxes();
 
     series_scatter->setName("HR and Distance");
