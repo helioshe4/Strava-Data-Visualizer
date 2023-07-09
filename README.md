@@ -1,6 +1,23 @@
 # Strava Data Visualizer
 This project is a data visualization tool built with C++ and the Qt framework. It uses the Strava API to retrieve workout data and displays it in an interactive chart. The tool provides insights into workout trends over time, including distance, average heart rate, moving time, etc.
 
+## Passing API credentials:
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/594eb26c-a847-46be-af83-6a9687f428b2" width="500">
+</div>
+
+## Example Chart 1:
+
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/84062436-172e-48de-9fde-b00de5403410" width="800">
+</div>
+
+## Example Chart 2:
+
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/80d342f5-4d58-47d0-9257-3de42ce29bd7" width="700">
+</div>
+  
 ## Features
 
 - Retrieves workout data from Strava's REST API using OAuth 2.0 authentication.
