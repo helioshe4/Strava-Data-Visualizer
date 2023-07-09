@@ -44,7 +44,7 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 
 ## Usage
 
-After compiling the project, you can run the application with `./QTStravaChart` (or whatever the generated executable is named, should be `QTStravaChart` though).
+After compiling the project, you can run the application with `./QTStravaChart`.
 
 If you would like to use API credentials from your own Strava account, information can be found [here](https://towardsdatascience.com/using-the-strava-api-and-pandas-to-explore-your-activity-data-d94901d9bfde).
 ## Authors
