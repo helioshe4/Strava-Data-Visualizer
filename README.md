@@ -4,19 +4,19 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 ## Passing Strava API credentials:
 
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/dfab2ad5-7db6-425c-bf4c-9e233e6af1d8" width="300">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/0da62384-36a1-4588-9448-8017da471263" width="300">
 </div>
 
 ## Example Chart 1:
 
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/84062436-172e-48de-9fde-b00de5403410" width="800">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/60a9e2b4-33a3-429e-81db-f05b424be81e" width="700">
 </div>
 
 ## Example Chart 2:
 
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/80d342f5-4d58-47d0-9257-3de42ce29bd7" width="700">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/64cd2692-05c0-406b-9482-c393d7557cb8" width="700">
 </div>
   
 ## Features
