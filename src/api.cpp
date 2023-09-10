@@ -1,7 +1,4 @@
-//#include <iostream>
-//#include <vector>
 #include "../include/api.h"
-//#include "../include/chartrenderer.h"
 #include "../include/workoutdatapoint.h"
 
 std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArray) {
@@ -20,18 +17,11 @@ std::vector<WorkoutDataPoint> convertJsonToVector(const nlohmann::json &jsonArra
 
     workoutDataPoint.type = jsonObject.contains("name") && !jsonObject["type"].is_null() ? jsonObject["type"] : "";
     workoutDataPoint.sport_type = jsonObject.contains("sport_type") && !jsonObject["sport_type"].is_null() ? jsonObject["sport_type"] : "";
-    workoutDataPoint.workout_type = jsonObject.contains("workout_type") && !jsonObject["workout_type"].is_null() ? jsonObject["workout_type"] : "";
+    workoutDataPoint.workout_type = jsonObject.contains("workout_type") && !jsonObject["workout_type"].is_null() ? jsonObject["workout_type"].get<int>() : -1;
 
     workoutDataPoint.id = jsonObject.contains("id") ? jsonObject["id"].get<int>() : 0;
 
-    //workoutDataPoint.start_date = jsonObject.contains("start_date") && !jsonObject["start_date"].is_null() ? jsonObject["start_date"] : "";
-	workoutDataPoint.start_date =  jsonObject.contains("start_date") && !jsonObject["start_date"].is_null() ? jsonObject["start_date"] : "";
-	/*
-	struct tm startDate = {};
-	if (!startDateStr.empty()) {
-    	strptime(startDateStr.c_str(), "%Y-%m-%dT%H:%M:%SZ", &startDate);
-	}
-	*/
+    workoutDataPoint.start_date = jsonObject.contains("start_date") && !jsonObject["start_date"].is_null() ? jsonObject["start_date"] : "";
 
     workoutDataPoint.start_date_local = jsonObject.contains("start_date_local") && !jsonObject["start_date_local"].is_null() ? jsonObject["start_date_local"] : "";
     workoutDataPoint.timezone = jsonObject.contains("timezone") && !jsonObject["timezone"].is_null() ? jsonObject["timezone"] : "";
@@ -121,33 +111,15 @@ nlohmann::json getJsonFromUrl(const std::string &url, const std::string &header,
 }
 
 std::vector<WorkoutDataPoint> getWorkoutData(const std::string &client_id, const std::string &client_secret, const std::string &refresh_token) {
-  
-  loadEnvFromFile("../src/.env");
-
-  /*
-  const char *client_id = std::getenv("CLIENT_ID");
-  const char *client_secret = std::getenv("STRAVA_CLIENT_SECRET");
-  const char *refresh_token = std::getenv("STRAVA_REFRESH_TOKEN");
-  */
-  
-
   std::string postFields = "client_id=" + client_id + "&client_secret=" + client_secret + "&refresh_token=" + refresh_token + "&grant_type=refresh_token&f=json";
-  /*
-  if (!client_id || !client_secret || !refresh_token) {
-    std::cerr << "Error: Missing environment variables." << std::endl;
-    return std::vector<WorkoutDataPoint>();
-  }
-  */
 
   std::string auth_url = "https://www.strava.com/oauth/token";
   std::string activities_url = "https://www.strava.com/api/v3/athlete/activities";
-  //std::string postFields = "client_id=" + std::string(client_id) + "&client_secret=" + std::string(client_secret) + "&refresh_token=" + std::string(refresh_token) + "&grant_type=refresh_token&f=json";
   std::string header = "";
 
   std::cout << "Requesting Token...\n";
   nlohmann::json res = getJsonFromUrl(auth_url, header, postFields);
   std::string access_token = res["access_token"];
-  //std::cout << "Access Token = " << access_token << "\n";
 
   header = "Authorization: Bearer " + access_token;
   postFields = "per_page=200&page=1";

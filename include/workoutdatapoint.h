@@ -13,7 +13,7 @@ struct WorkoutDataPoint {
     double total_elevation_gain;
     std::string type;
     std::string sport_type;
-    std::string workout_type;
+    int workout_type;
     int id;
     std::string start_date;
 //	struct tm start_date;
