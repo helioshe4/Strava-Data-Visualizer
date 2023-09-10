@@ -20,7 +20,8 @@ HEADERS += \
     stravachart.h \
     $$PWD/../include/api.h \
     $$PWD/../include/workoutdatapoint.h \
-    $$PWD/../include/json.h
+    $$PWD/../include/json.h \
+    ui_stravachart.h
 
 FORMS += \
     stravachart.ui

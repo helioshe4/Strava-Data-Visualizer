@@ -1,7 +1,10 @@
 #include "stravachart.h"
 #include "customchartview.h"
 #include "credentialsdialog.h"
+#include "../include/api.h"
 
+#include <ctime>
+#include <iostream>
 #include <QApplication>
 #include <QDateTime>
 #include <QtWidgets/QMainWindow>
@@ -18,9 +21,6 @@
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
 #include <QtCharts/QScatterSeries>
-#include "../include/api.h"
-#include <ctime>
-#include <iostream>
 #include <QToolTip>
 #include <QVBoxLayout>
 #include <QtCharts/QLegend>
@@ -28,6 +28,7 @@
 
 QT_CHARTS_USE_NAMESPACE
 
+/*
 void updateMaxValue(std::map<qint64, qreal>& maxValues, qint64 xValue, qreal yValue) {
     auto it = maxValues.find(xValue);
     if (it != maxValues.end()) {
@@ -51,9 +52,15 @@ void appendPointsToSeries(QLineSeries* series, const std::map<qint64, qreal>& ma
 qint64 roundToNearestInterval(qint64 timestamp, qint64 interval) {
     return (timestamp / interval) * interval;
 }
+*/
 
 int main(int argc, char *argv[])
 {
+    QApplication a(argc, argv);
+    StravaChart w;
+    w.show();
+    return a.exec();
+    /*
     QApplication a(argc, argv);
 
     QString client_id;
@@ -77,28 +84,6 @@ int main(int argc, char *argv[])
     }
     //api call to get workoutdata
     std::vector<WorkoutDataPoint> data = getWorkoutData(client_id.toStdString(), client_secret.toStdString(), refresh_token.toStdString());
-
-
-
-
-    /*
-    QLineSeries *series1 = new QLineSeries();
-    QLineSeries *series2 = new QLineSeries();
-    QLineSeries *series3 = new QLineSeries();
-    QScatterSeries *series4 = new QScatterSeries();
-
-    for (const WorkoutDataPoint& dataPoint : data) {
-        // Convert the date to a QDateTime
-        QString qstr = QString::fromStdString(dataPoint.start_date);
-        QDateTime datetime = QDateTime::fromString(qstr, Qt::ISODate);
-        qint64 xValue = datetime.toMSecsSinceEpoch();
-        series1->append(xValue, (dataPoint.distance) / 1000);
-        series2->append(xValue, dataPoint.average_heartrate);
-        series3->append(xValue, (dataPoint.moving_time) / 60);
-        series4->append(dataPoint.average_heartrate, (dataPoint.distance) / 1000);
-        std::cout << xValue << std::endl;
-    }
-    */
 
     QLineSeries *series_distance = new QLineSeries();
     QLineSeries *series_avg_hr = new QLineSeries();
@@ -147,20 +132,6 @@ int main(int argc, char *argv[])
     series_distance->setName("Distance (km)");
     series_avg_hr->setName("Average Heart Rate (bpm)");
     series_moving_time->setName("Moving Time (min)");
-
-
-
-    //labels on series
-    /*
-    series1->setPointLabelsVisible(true);
-    series1->setPointLabelsFormat("@yPoint");
-
-    series2->setPointLabelsVisible(true);
-    series2->setPointLabelsFormat("@yPoint");
-
-    series3->setPointLabelsVisible(true);
-    series3->setPointLabelsFormat("@yPoint");
-    */
 
     chart1->setAnimationOptions(QChart::AllAnimations);
     chart1->setTitle("Workout Metrics Over Time");
@@ -250,4 +221,5 @@ int main(int argc, char *argv[])
     window.show();
 
     return a.exec();
+    */
 }

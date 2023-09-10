@@ -13,28 +13,7 @@
   <property name="windowTitle">
    <string>StravaChart</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>0</y>
-      <width>79</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Test123</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Testt456</string>
-     </property>
-    </item>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
