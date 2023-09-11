@@ -253,12 +253,33 @@ StravaChart::StravaChart(QWidget *parent)
     // connects combobox selection to rendered y axis
     connect(comboBox1, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChart(int)));
 
-//    QComboBox *comboBox2 = new QComboBox();
-//    comboBox2->addItem("Distance (km)");
-//    comboBox2->addItem("Average HR (bpm)");
-//    comboBox2->addItem("Moving Time (min)");
-//    comboBox2->addItem("All");
-//    layout->addWidget(comboBox2);
+    // For chartView2
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    hLayout->addStretch(1);
+
+    QLabel *label2 = new QLabel("X Axis:");
+    label2->setAlignment(Qt::AlignRight);
+    hLayout->addWidget(label2);
+
+    QComboBox *comboBox2 = new QComboBox();
+    comboBox2->addItem("Distance (km)");
+    comboBox2->addItem("Average HR (bpm)");
+    comboBox2->addItem("Moving Time (min)");
+    hLayout->addWidget(comboBox2);
+
+    QLabel *label3 = new QLabel("Y Axis:");
+    label3->setAlignment(Qt::AlignLeft);
+    hLayout->addWidget(label3);
+
+    QComboBox *comboBox3 = new QComboBox();
+    comboBox3->addItem("Distance (km)");
+    comboBox3->addItem("Average HR (bpm)");
+    comboBox3->addItem("Moving Time (min)");
+    hLayout->addWidget(comboBox3);
+
+    hLayout->addStretch(1);
+
+    layout->addLayout(hLayout);
     layout->addWidget(chartView2);
 
     ui->centralwidget->setLayout(layout);
