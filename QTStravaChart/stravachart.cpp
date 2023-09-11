@@ -3,6 +3,62 @@
 #include "customchartview.h"
 #include "credentialsdialog.h"
 
+void StravaChart::updateChart(int index) {
+
+    // Hide existing Y-axis and series from the chart
+    if (index != 3) {
+        axisY->hide();
+        axisY2->hide();
+        axisY3->hide();
+
+        series_distance->hide();
+        series_avg_hr->hide();
+        series_moving_time->hide();
+    }
+
+    QLineSeries *newSeries = nullptr;
+    QValueAxis *newAxisY = nullptr;
+    QString metric;
+
+    switch (index) {
+        case 0:
+            newSeries = series_distance;  // assumed to be already populated
+            newAxisY = axisY;
+            metric = "Distance (km)";
+            break;
+        case 1:
+            newSeries = series_avg_hr;  // assumed to be already populated
+            newAxisY = axisY2;
+            metric = "Average HR (bpm)";
+            break;
+        case 2:
+            newSeries = series_moving_time;  // assumed to be already populated
+            newAxisY = axisY3;
+            metric = "Moving Time (min)";
+            break;
+        case 3:
+            axisY->show();
+            axisY2->show();
+            axisY3->show();
+
+            series_distance->show();
+            series_avg_hr->show();
+            series_moving_time->show();
+            return;
+    }
+
+    if (newSeries != nullptr && newAxisY != nullptr) {
+        newAxisY->setLabelFormat("%i");
+        newAxisY->setTitleText(metric);
+        //chart1->addAxis(newAxisY, Qt::AlignRight);
+
+        newSeries->show();
+        newAxisY->show();
+        //newSeries->attachAxis(axisX);  // assumed to be the existing X-axis
+        //newSeries->attachAxis(newAxisY);
+    }
+}
+
 void StravaChart::updateMaxValue(std::map<qint64, qreal>& maxValues, qint64 xValue, qreal yValue) {
     auto it = maxValues.find(xValue);
     if (it != maxValues.end()) {
@@ -56,9 +112,9 @@ StravaChart::StravaChart(QWidget *parent)
     //api call to get workoutdata
     std::vector<WorkoutDataPoint> data = getWorkoutData(client_id.toStdString(), client_secret.toStdString(), refresh_token.toStdString());
 
-    QLineSeries *series_distance = new QLineSeries();
-    QLineSeries *series_avg_hr = new QLineSeries();
-    QLineSeries *series_moving_time = new QLineSeries();
+    series_distance = new QLineSeries();
+    series_avg_hr = new QLineSeries();
+    series_moving_time = new QLineSeries();
     QScatterSeries *series_scatter = new QScatterSeries();
 
     std::map<qint64, qreal> maxValues1;
@@ -95,7 +151,7 @@ StravaChart::StravaChart(QWidget *parent)
         series_scatter->append(dataPoint.average_heartrate, (dataPoint.distance) / 1000);
     }
 
-    QChart *chart1 = new QChart();
+    chart1 = new QChart();
     //series
     chart1->addSeries(series_distance);
     chart1->addSeries(series_avg_hr);
@@ -103,29 +159,30 @@ StravaChart::StravaChart(QWidget *parent)
     series_distance->setName("Distance (km)");
     series_avg_hr->setName("Average Heart Rate (bpm)");
     series_moving_time->setName("Moving Time (min)");
+    series_avg_hr->hide();
+    series_moving_time->hide();
 
     chart1->setAnimationOptions(QChart::AllAnimations);
     chart1->setTitle("Workout Metrics Over Time");
 
     // Create and set the x-axis
-    QDateTimeAxis *axisX = new QDateTimeAxis;
+    axisX = new QDateTimeAxis;
     axisX->setTickCount(10);
     axisX->setFormat("MMM yyyy");
     axisX->setTitleText("Date");
     chart1->addAxis(axisX, Qt::AlignBottom);
 
-
-    QValueAxis *axisY = new QValueAxis;
+    axisY = new QValueAxis;
     axisY->setLabelFormat("%i");
     axisY->setTitleText("Distance (km)");
     chart1->addAxis(axisY, Qt::AlignRight);
 
-    QValueAxis *axisY2 = new QValueAxis;
+    axisY2 = new QValueAxis;
     axisY2->setLabelFormat("%i");
     axisY2->setTitleText("Average HR (bpm)");
     chart1->addAxis(axisY2, Qt::AlignRight);
 
-    QValueAxis *axisY3 = new QValueAxis;
+    axisY3 = new QValueAxis;
     axisY3->setLabelFormat("%i");
     axisY3->setTitleText("Moving Time (min)");
     chart1->addAxis(axisY3, Qt::AlignRight);
@@ -138,6 +195,8 @@ StravaChart::StravaChart(QWidget *parent)
     series_distance->attachAxis(axisY);
     series_avg_hr->attachAxis(axisY2);
     series_moving_time->attachAxis(axisY3);
+    axisY2->hide();
+    axisY3->hide();
 
 
     //legend
@@ -148,7 +207,8 @@ StravaChart::StravaChart(QWidget *parent)
     QChartView *chartView1 = new QChartView(chart1);
     chartView1->setRenderHint(QPainter::Antialiasing);
 
-    //chart 2
+
+    /*------------------------CHART 2-------------------------------*/
     QChart *chart2 = new QChart();
     //general setup
     chart2->setTitle("Relationship between average HR and distance");
@@ -181,8 +241,26 @@ StravaChart::StravaChart(QWidget *parent)
 
     //QVBoxLayout *layout = new QVBoxLayout(ui->chartContainer);
     QVBoxLayout *layout = new QVBoxLayout();
+
+    QComboBox *comboBox1 = new QComboBox();
+    comboBox1->addItem("Distance (km)");
+    comboBox1->addItem("Average HR (bpm)");
+    comboBox1->addItem("Moving Time (min)");
+    comboBox1->addItem("All");
+    layout->addWidget(comboBox1);
     layout->addWidget(chartView1);
+
+    // connects combobox selection to rendered y axis
+    connect(comboBox1, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChart(int)));
+
+//    QComboBox *comboBox2 = new QComboBox();
+//    comboBox2->addItem("Distance (km)");
+//    comboBox2->addItem("Average HR (bpm)");
+//    comboBox2->addItem("Moving Time (min)");
+//    comboBox2->addItem("All");
+//    layout->addWidget(comboBox2);
     layout->addWidget(chartView2);
+
     ui->centralwidget->setLayout(layout);
 }
 

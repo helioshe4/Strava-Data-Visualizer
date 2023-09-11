@@ -18,6 +18,7 @@
 #include <QtCharts/QHorizontalStackedBarSeries>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QCategoryAxis>
+#include <QComboBox>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
 #include <QtCharts/QScatterSeries>
@@ -42,8 +43,21 @@ public:
     void appendPointsToSeries(QtCharts::QLineSeries* series, const std::map<qint64, qreal>& maxValues);
     qint64 roundToNearestInterval(qint64 timestamp, qint64 interval);
 
+
 private:
     Ui::StravaChart *ui;
+    QtCharts::QChart *chart1;
+    QtCharts::QLineSeries *series_distance;
+    QtCharts::QLineSeries *series_avg_hr;
+    QtCharts::QLineSeries *series_moving_time;
+    QtCharts::QDateTimeAxis *axisX;
+    QtCharts::QValueAxis *axisY;
+    QtCharts::QValueAxis *axisY2;
+    QtCharts::QValueAxis *axisY3;
+
+
+private slots:
+    void updateChart(int index);
 };
 
 
