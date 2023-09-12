@@ -48,6 +48,7 @@ public:
 private:
     Ui::StravaChart *ui;
     QtCharts::QChart *chart1;
+    QtCharts::QChart *chart2;
     QtCharts::QLineSeries *series_distance;
     QtCharts::QLineSeries *series_avg_hr;
     QtCharts::QLineSeries *series_moving_time;
@@ -56,9 +57,21 @@ private:
     QtCharts::QValueAxis *axisY2;
     QtCharts::QValueAxis *axisY3;
 
+    QtCharts::QScatterSeries *series_scatter;
+    //Scatter plot vectors
+    QVector<qreal> distanceData;
+    QVector<qreal> avgHRData;
+    QVector<qreal> movingTimeData;
+
+    QtCharts::QValueAxis *scatterAxisX;
+    QtCharts::QValueAxis *scatterAxisY;
+
+
 
 private slots:
-    void updateChart(int index);
+    void updateChart1(int index);
+    void updateChart2X(int index);
+    void updateChart2Y(int index);
 };
 
 

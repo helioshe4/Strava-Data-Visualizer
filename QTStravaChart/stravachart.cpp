@@ -3,8 +3,7 @@
 #include "customchartview.h"
 #include "credentialsdialog.h"
 
-void StravaChart::updateChart(int index) {
-
+void StravaChart::updateChart1(int index) {
     // Hide existing Y-axis and series from the chart
     if (index != 3) {
         axisY->hide();
@@ -58,6 +57,97 @@ void StravaChart::updateChart(int index) {
         //newSeries->attachAxis(newAxisY);
     }
 }
+
+void StravaChart::updateChart2X(int index) {
+    QVector<QPointF> newPoints;
+
+    switch (index) {
+        case 0: // udpate x axis with distanceData
+            for (int i = 0; i < series_scatter->count(); ++i) {
+                QPointF oldPoint = series_scatter->at(i);
+                newPoints.append(QPointF(distanceData[i], oldPoint.y()));
+            }
+            scatterAxisX->setTitleText("Distance (km)");
+            break;
+        case 1: // udpate x axis with avgHRData
+            for (int i = 0; i < series_scatter->count(); ++i) {
+                QPointF oldPoint = series_scatter->at(i);
+                newPoints.append(QPointF(avgHRData[i], oldPoint.y()));
+            }
+            scatterAxisX->setTitleText("Average HR (bpm)");
+            break;
+        case 2: // udpate x axis with movingTimeData
+            for (int i = 0; i < series_scatter->count(); ++i) {
+                QPointF oldPoint = series_scatter->at(i);
+                newPoints.append(QPointF(movingTimeData[i], oldPoint.y()));
+            }
+            scatterAxisX->setTitleText("Moving Time (min)");
+            break;
+        default:
+            break;
+    }
+    series_scatter->replace(newPoints);
+
+    qreal minX = std::numeric_limits<qreal>::max();
+    qreal maxX = std::numeric_limits<qreal>::min();
+
+    for (const auto& point : newPoints) {
+        minX = std::min(minX, point.x());
+        maxX = std::max(maxX, point.x());
+    }
+
+    scatterAxisX->setMin(qMax(0.0, minX - 10));
+    scatterAxisX->setMax(maxX + 10);
+
+    series_scatter->chart()->update();
+    chart2->update();
+}
+
+void StravaChart::updateChart2Y(int index) {
+    QVector<QPointF> newPoints;
+
+    switch (index) {
+        case 0: // udpate y axis with distanceData
+            for (int i = 0; i < series_scatter->count(); ++i) {
+                QPointF oldPoint = series_scatter->at(i);
+                newPoints.append(QPointF(oldPoint.x(), distanceData[i]));
+            }
+            scatterAxisY->setTitleText("Distance (km)");
+            break;
+        case 1: // udpate y axis with avgHRData
+            for (int i = 0; i < series_scatter->count(); ++i) {
+                QPointF oldPoint = series_scatter->at(i);
+                newPoints.append(QPointF(oldPoint.x(), avgHRData[i]));
+            }
+            scatterAxisY->setTitleText("Average HR (bpm)");
+            break;
+        case 2: // udpate y axis with movingTimeData
+            for (int i = 0; i < series_scatter->count(); ++i) {
+                QPointF oldPoint = series_scatter->at(i);
+                newPoints.append(QPointF(oldPoint.x(), movingTimeData[i]));
+            }
+            scatterAxisY->setTitleText("Moving Time (min)");
+            break;
+        default:
+            break;
+    }
+    series_scatter->replace(newPoints);
+
+    qreal minY = std::numeric_limits<qreal>::max();
+    qreal maxY = std::numeric_limits<qreal>::min();
+
+    for (const auto& point : newPoints) {
+        minY = std::min(minY, point.y());
+        maxY = std::max(maxY, point.y());
+    }
+
+    scatterAxisY->setMin(qMax(0.0, minY - 10));
+    scatterAxisY->setMax(maxY + 10);
+
+    series_scatter->chart()->update();
+    chart2->update();
+}
+
 
 void StravaChart::updateMaxValue(std::map<qint64, qreal>& maxValues, qint64 xValue, qreal yValue) {
     auto it = maxValues.find(xValue);
@@ -115,7 +205,7 @@ StravaChart::StravaChart(QWidget *parent)
     series_distance = new QLineSeries();
     series_avg_hr = new QLineSeries();
     series_moving_time = new QLineSeries();
-    QScatterSeries *series_scatter = new QScatterSeries();
+    series_scatter = new QScatterSeries();
 
     std::map<qint64, qreal> maxValues1;
     std::map<qint64, qreal> maxValues2;
@@ -132,6 +222,7 @@ StravaChart::StravaChart(QWidget *parent)
 
         qreal yValue1 = (dataPoint.distance) / 1000;
         qreal yValue2 = dataPoint.average_heartrate;
+        std::cout << "yValue2: " << yValue2 << std::endl;
         qreal yValue3 = (dataPoint.moving_time) / 60;
 
         // Check if we've already added a point with this x value for each series
@@ -139,6 +230,10 @@ StravaChart::StravaChart(QWidget *parent)
         updateMaxValue(maxValues1, xValue, yValue1);
         updateMaxValue(maxValues2, xValue, yValue2);
         updateMaxValue(maxValues3, xValue, yValue3);
+
+        distanceData.append(yValue1);
+        avgHRData.append(yValue2);
+        movingTimeData.append(yValue3);
     }
 
     // Now add the points to the series
@@ -148,8 +243,14 @@ StravaChart::StravaChart(QWidget *parent)
 
     // For the scatter series, just append the points directly
     for (const WorkoutDataPoint& dataPoint : data) {
-        series_scatter->append(dataPoint.average_heartrate, (dataPoint.distance) / 1000);
+        series_scatter->append((dataPoint.distance) / 1000, (dataPoint.distance) / 1000);
+        //series_scatter->append(dataPoint.average_heartrate, (dataPoint.distance) / 1000);
     }
+
+    std::cout << "distanceData size: " << distanceData.size() << std::endl;
+    std::cout << "avgHRData size: " << avgHRData.size() << std::endl;
+    std::cout << "movingTimeData size: " << movingTimeData.size() << std::endl;
+    std::cout << "series_scatter size: " << series_scatter->count() << std::endl;
 
     chart1 = new QChart();
     //series
@@ -209,9 +310,9 @@ StravaChart::StravaChart(QWidget *parent)
 
 
     /*------------------------CHART 2-------------------------------*/
-    QChart *chart2 = new QChart();
+    chart2 = new QChart();
     //general setup
-    chart2->setTitle("Relationship between average HR and distance");
+    chart2->setTitle("Relationship between metrics");
     chart2->createDefaultAxes();
 
     series_scatter->setName("HR and Distance");
@@ -221,9 +322,10 @@ StravaChart::StravaChart(QWidget *parent)
     chart2->addSeries(series_scatter);
 
     //axes
-    QValueAxis *scatterAxisX = new QValueAxis;
+    scatterAxisX = new QValueAxis;
     scatterAxisX->setLabelFormat("%i");
-    scatterAxisX->setTitleText("Average HR");
+    scatterAxisX->setTitleText("Distance (km)");
+    //scatterAxisX->setTitleText("Average HR");
     chart2->addAxis(scatterAxisX, Qt::AlignBottom);
     series_scatter->attachAxis(scatterAxisX);
     // Extend X-axis by 10 units in both directions
@@ -232,7 +334,7 @@ StravaChart::StravaChart(QWidget *parent)
     scatterAxisX->setMin(qMax(0.0, minX - 10));
     scatterAxisX->setMax(maxX + 10);
 
-    QValueAxis *scatterAxisY = new QValueAxis;
+    scatterAxisY = new QValueAxis;
     scatterAxisY->setLabelFormat("%i");
     scatterAxisY->setTitleText("Distance (km)");
     chart2->addAxis(scatterAxisY, Qt::AlignLeft);
@@ -249,7 +351,8 @@ StravaChart::StravaChart(QWidget *parent)
     //legend
     chart2->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 
-    //QVBoxLayout *layout = new QVBoxLayout(ui->chartContainer);
+
+    /*------------------------ComboBox Layout-------------------------------*/
     QVBoxLayout *layout = new QVBoxLayout();
 
     QComboBox *comboBox1 = new QComboBox();
@@ -261,7 +364,7 @@ StravaChart::StravaChart(QWidget *parent)
     layout->addWidget(chartView1);
 
     // connects combobox selection to rendered y axis
-    connect(comboBox1, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChart(int)));
+    connect(comboBox1, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChart1(int)));
 
     // For chartView2
     QHBoxLayout *hLayout = new QHBoxLayout();
@@ -287,7 +390,12 @@ StravaChart::StravaChart(QWidget *parent)
     comboBox3->addItem("Moving Time (min)");
     hLayout->addWidget(comboBox3);
 
+    //centers the labels/comboboxes
     hLayout->addStretch(1);
+
+    connect(comboBox2, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChart2X(int)));
+    connect(comboBox3, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChart2Y(int)));
+
 
     layout->addLayout(hLayout);
     layout->addWidget(chartView2);
