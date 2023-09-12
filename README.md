@@ -15,11 +15,11 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 -->
 
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/502beae7-fd49-4dff-b741-333284f45ff4" width="700">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/502beae7-fd49-4dff-b741-333284f45ff4" width="600">
 </div>
 <br>
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/ce1af193-df06-41e2-bb4f-85400d37944f" width="700">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/ce1af193-df06-41e2-bb4f-85400d37944f" width="600">
 </div>
 
 
@@ -27,12 +27,21 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 ## Example Chart 2:
 <!---
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/64cd2692-05c0-406b-9482-c393d7557cb8" width="700">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/64cd2692-05c0-406b-9482-c393d7557cb8" width="600">
+</div>
+-->
+<!---
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/366acaed-2895-4e39-86a6-7465639d0a5c" width="600">
 </div>
 -->
 <div align="center">
-  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/366acaed-2895-4e39-86a6-7465639d0a5c" width="700">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/a77e881e-cf4b-4452-8996-599dade740b8" width="600">
 </div>
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/da6efef2-6459-4f79-a6cd-18385c71033d" width="600">
+</div>
+
 
   
 ## Features
