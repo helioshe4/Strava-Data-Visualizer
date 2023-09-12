@@ -8,10 +8,21 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 </div>
 
 ## Example Chart 1:
-
+<!---
 <div align="center">
   <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/60a9e2b4-33a3-429e-81db-f05b424be81e" width="700">
 </div>
+-->
+
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/502beae7-fd49-4dff-b741-333284f45ff4" width="700">
+</div>
+<br>
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/ce1af193-df06-41e2-bb4f-85400d37944f" width="700">
+</div>
+
+
 
 ## Example Chart 2:
 
@@ -24,7 +35,21 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 - Retrieves workout data from Strava's REST API using OAuth 2.0 authentication.
 - Visualizes data using interactive charts created with Qt Charts.
 
-## Installation
+## Installation (Build)
+
+### Prerequisites (To generate executable)
+- Docker Engine
+- git
+
+### Steps (Linux)
+1. `git clone https://github.com/helioshe4/Strava-Data-Visualizer.git`  
+2. `cd Strava-Data-Visualizer`  
+3. Run script to compile via Docker container: `./tools/build.sh`  
+4. Navigate to executable: `cd QTStravaChart`
+5. Run executable: `./QTStravaChart`
+
+   
+## Installation (Development)
 
 ### Prerequisites
 
@@ -34,17 +59,16 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 - nlohmann JSON library
 - Qt Charts library
 
-### Steps
+### Steps (Linux)
 
 1. `sudo apt-get update`  
 2. `sudo apt-get -y install build-essential qt5-default libcurl4-openssl-dev nlohmann-json3-dev libqt5charts5-dev`  
 3. Clone the repository: `git clone https://github.com/helioshe4/Strava-Data-Visualizer.git`  
 4. Navigate to the project's src directory: `cd Strava-Data-Visualizer/src`
 5. Compile the project: `make`
+6. To develop via qt: run `qtcreator` for the qt IDE.  Ensure you have X11 forwarding if using WSL or via ssh.
 
 ## Usage
-
-After compiling the project, you can run the application with `./QTStravaChart`.
 
 If you would like to use API credentials from your own Strava account, information can be found [here](https://towardsdatascience.com/using-the-strava-api-and-pandas-to-explore-your-activity-data-d94901d9bfde).
 ## Authors
