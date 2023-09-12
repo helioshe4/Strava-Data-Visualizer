@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QtCharts/QLegend>
 #include <QtCharts/QLegendMarker>
+#include <QtMath>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class StravaChart; }

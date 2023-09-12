@@ -216,7 +216,7 @@ StravaChart::StravaChart(QWidget *parent)
 
     series_scatter->setName("HR and Distance");
     series_scatter->setMarkerShape(QScatterSeries::MarkerShapeCircle);
-    series_scatter->setMarkerSize(15.0);
+    series_scatter->setMarkerSize(10.0);
 
     chart2->addSeries(series_scatter);
 
@@ -226,12 +226,22 @@ StravaChart::StravaChart(QWidget *parent)
     scatterAxisX->setTitleText("Average HR");
     chart2->addAxis(scatterAxisX, Qt::AlignBottom);
     series_scatter->attachAxis(scatterAxisX);
+    // Extend X-axis by 10 units in both directions
+    qreal minX = scatterAxisX->min();
+    qreal maxX = scatterAxisX->max();
+    scatterAxisX->setMin(qMax(0.0, minX - 10));
+    scatterAxisX->setMax(maxX + 10);
 
     QValueAxis *scatterAxisY = new QValueAxis;
     scatterAxisY->setLabelFormat("%i");
     scatterAxisY->setTitleText("Distance (km)");
     chart2->addAxis(scatterAxisY, Qt::AlignLeft);
     series_scatter->attachAxis(scatterAxisY);
+    // Extend Y-axis by 10 units in both directions
+    qreal minY = scatterAxisY->min();
+    qreal maxY = scatterAxisY->max();
+    scatterAxisY->setMin(qMax(0.0, minY - 10));
+    scatterAxisY->setMax(maxY + 10);
 
     CustomChartView *chartView2 = new CustomChartView(chart2);
     chartView2->setRenderHint(QPainter::Antialiasing);
