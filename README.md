@@ -25,10 +25,15 @@ This project is a data visualization tool built with C++ and the Qt framework. I
 
 
 ## Example Chart 2:
-
+<!---
 <div align="center">
   <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/64cd2692-05c0-406b-9482-c393d7557cb8" width="700">
 </div>
+-->
+<div align="center">
+  <img src="https://github.com/helioshe4/Strava-Data-Visualizer/assets/115726225/366acaed-2895-4e39-86a6-7465639d0a5c" width="700">
+</div>
+
   
 ## Features
 
