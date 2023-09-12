@@ -68,6 +68,14 @@ void StravaChart::updateChart2X(int index) {
                 newPoints.append(QPointF(distanceData[i], oldPoint.y()));
             }
             scatterAxisX->setTitleText("Distance (km)");
+
+            if (scatterAxisY->titleText() == "Distance (km)") {
+                series_scatter->setName("Distance and Distance");
+            } else if (scatterAxisY->titleText() == "Average HR (bpm)") {
+                series_scatter->setName("Distance and Average HR");
+            } else if (scatterAxisY->titleText() == "Moving Time (min)") {
+                series_scatter->setName("Distance and Moving Time");
+            }
             break;
         case 1: // udpate x axis with avgHRData
             for (int i = 0; i < series_scatter->count(); ++i) {
@@ -75,6 +83,14 @@ void StravaChart::updateChart2X(int index) {
                 newPoints.append(QPointF(avgHRData[i], oldPoint.y()));
             }
             scatterAxisX->setTitleText("Average HR (bpm)");
+
+            if (scatterAxisY->titleText() == "Distance (km)") {
+                series_scatter->setName("Average HR and Distance");
+            } else if (scatterAxisY->titleText() == "Average HR (bpm)") {
+                series_scatter->setName("Average HR and Average HR");
+            } else if (scatterAxisY->titleText() == "Moving Time (min)") {
+                series_scatter->setName("Average HR and Moving Time");
+            }
             break;
         case 2: // udpate x axis with movingTimeData
             for (int i = 0; i < series_scatter->count(); ++i) {
@@ -82,6 +98,14 @@ void StravaChart::updateChart2X(int index) {
                 newPoints.append(QPointF(movingTimeData[i], oldPoint.y()));
             }
             scatterAxisX->setTitleText("Moving Time (min)");
+
+            if (scatterAxisY->titleText() == "Distance (km)") {
+                series_scatter->setName("Moving Time and Distance");
+            } else if (scatterAxisY->titleText() == "Average HR (bpm)") {
+                series_scatter->setName("Moving Time and Average HR");
+            } else if (scatterAxisY->titleText() == "Moving Time (min)") {
+                series_scatter->setName("Moving Time and Moving Time");
+            }
             break;
         default:
             break;
@@ -113,6 +137,14 @@ void StravaChart::updateChart2Y(int index) {
                 newPoints.append(QPointF(oldPoint.x(), distanceData[i]));
             }
             scatterAxisY->setTitleText("Distance (km)");
+
+            if (scatterAxisX->titleText() == "Distance (km)") {
+                series_scatter->setName("Distance and Distance");
+            } else if (scatterAxisX->titleText() == "Average HR (bpm)") {
+                series_scatter->setName("Average HR and Distance");
+            } else if (scatterAxisX->titleText() == "Moving Time (min)") {
+                series_scatter->setName("Moving Time and Distance");
+            }
             break;
         case 1: // udpate y axis with avgHRData
             for (int i = 0; i < series_scatter->count(); ++i) {
@@ -120,6 +152,14 @@ void StravaChart::updateChart2Y(int index) {
                 newPoints.append(QPointF(oldPoint.x(), avgHRData[i]));
             }
             scatterAxisY->setTitleText("Average HR (bpm)");
+
+            if (scatterAxisX->titleText() == "Distance (km)") {
+                series_scatter->setName("Distance and Average HR");
+            } else if (scatterAxisX->titleText() == "Average HR (bpm)") {
+                series_scatter->setName("Average HR and Average HR");
+            } else if (scatterAxisX->titleText() == "Moving Time (min)") {
+                series_scatter->setName("Moving Time and Average HR");
+            }
             break;
         case 2: // udpate y axis with movingTimeData
             for (int i = 0; i < series_scatter->count(); ++i) {
@@ -127,6 +167,14 @@ void StravaChart::updateChart2Y(int index) {
                 newPoints.append(QPointF(oldPoint.x(), movingTimeData[i]));
             }
             scatterAxisY->setTitleText("Moving Time (min)");
+
+            if (scatterAxisX->titleText() == "Distance (km)") {
+                series_scatter->setName("Distance and Moving Time");
+            } else if (scatterAxisX->titleText() == "Average HR (bpm)") {
+                series_scatter->setName("Average HR and Moving Time");
+            } else if (scatterAxisX->titleText() == "Moving Time (min)") {
+                series_scatter->setName("Moving Time and Moving Time");
+            }
             break;
         default:
             break;
@@ -315,7 +363,7 @@ StravaChart::StravaChart(QWidget *parent)
     chart2->setTitle("Relationship between metrics");
     chart2->createDefaultAxes();
 
-    series_scatter->setName("HR and Distance");
+    series_scatter->setName("Distance and Distance");
     series_scatter->setMarkerShape(QScatterSeries::MarkerShapeCircle);
     series_scatter->setMarkerSize(10.0);
 
